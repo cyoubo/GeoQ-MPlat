@@ -11,12 +11,6 @@ public class SpatialReference {
 
     private int wkid;
     private int latestWkid;
+    private String wkt;
 
-    @Override
-    public String toString() {
-        return "spatialReferenceElement{" +
-                "wkid=" + wkid +
-                ", latestWkid=" + latestWkid +
-                '}';
-    }
 }

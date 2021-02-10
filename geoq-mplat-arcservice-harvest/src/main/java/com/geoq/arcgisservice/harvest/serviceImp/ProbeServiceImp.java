@@ -36,7 +36,7 @@ public class ProbeServiceImp implements ProbeService {
             String response_fold = restTemplate.getForObject(fold_url, String.class);
             Catalog fold = JSONUtil.toBean(JSONUtil.parseObj(response_fold),Catalog.class);
             for (com.geoq.arcserver.admin.message.element.Service service : fold.getServices()) {
-                result.add(new ServiceRecord(folder,service.getName(), service.getType()));
+                result.add(new ServiceRecord(folder,service.getName().split("/")[1], service.getType()));
             }
         }
         return result;

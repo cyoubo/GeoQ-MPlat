@@ -11,6 +11,8 @@
     <file url="file://$PROJECT_DIR$/geoq-mplat-adapter-config/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/geoq-mplat-arcservice-harvest/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/geoq-mplat-arcservice-harvest/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/geoq-mplat-assettype-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/geoq-mplat-assettype-admin/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/geoq-mplat-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/geoq-mplat-common/src/main/resources" charset="UTF-8" />
   </component>

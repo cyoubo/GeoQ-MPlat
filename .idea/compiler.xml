@@ -13,6 +13,7 @@
         <module name="geoq-mplat-arcservice-harvest" />
         <module name="geoq-mplat-common" />
         <module name="geoq-mplat-adapter-config" />
+        <module name="geoq-mplat-assettype-admin" />
         <module name="geoq-fw-common" />
       </profile>
     </annotationProcessing>

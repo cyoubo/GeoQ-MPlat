@@ -15,6 +15,7 @@
         <module>geoq-mplat-adapter-config</module>
         <module>geoq-mplat-arcservice-harvest</module>
         <module>geoq-fw-arcserver-admin</module>
+        <module>geoq-mplat-assettype-admin</module>
     </modules>
 
     <properties>

@@ -1,0 +1,25 @@
+server:
+  port: 8010
+spring:
+  application:
+    name: AssertType_Admin
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/middleground
+    username: middleground
+    password: admin123
+
+mybatis:
+  mapper-locations: classpath:/*Mapper.xml
+  type-aliases-package: com.test.mybatis.pojo
+
+swagger:
+  title: 用户管理微服务接口说明
+  description: 对数据中台各操作人员的登记、赋权操作接口
+
+treenode:
+  parent-id-key: parentUuid;
+  id-key: uuid;
+  deep: 4
+  name-key: name
