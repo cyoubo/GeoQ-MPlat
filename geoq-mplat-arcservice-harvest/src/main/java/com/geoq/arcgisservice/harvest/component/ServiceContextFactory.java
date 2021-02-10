@@ -11,7 +11,6 @@ public class ServiceContextFactory {
 
     public AbstractServiceContext create(String messageClassName)
     {
-        log.info(messageClassName);
         switch (messageClassName)
         {
             case "MapServiceMessage" : return new MapServiceContext();
