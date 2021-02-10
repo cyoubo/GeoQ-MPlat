@@ -1,0 +1,9 @@
+server:
+  port: 8003
+spring:
+  application:
+    name: arcservice-harvest
+
+swagger:
+  title: arcgis-service 信息收割器微服务组件接口
+  description: 用于探测arcgis-service服务状态，收割arcgis-service元数据等操作

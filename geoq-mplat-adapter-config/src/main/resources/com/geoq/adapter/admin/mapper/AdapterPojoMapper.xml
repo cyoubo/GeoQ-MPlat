@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geoq.adapter.admin.mapper.AdapterPojoMapper" >
+  <resultMap id="BaseResultMap" type="com.geoq.adapter.admin.pojo.AdapterPojo" >
+    <constructor >
+      <idArg column="uuid" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="adapter_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="adapter_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="adapter_context" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="adapter_description" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    uuid, adapter_type, adapter_name, adapter_context, adapter_description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from mg_adapter_config
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </select>
+  <select id="select_all" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from mg_adapter_config
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from mg_adapter_config
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+    delete from mg_adapter_config where uuid in
+    <foreach collection="array" item="arr" index="no" open="(" separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.geoq.adapter.admin.pojo.AdapterPojo" >
+    insert into mg_adapter_config (uuid, adapter_type, adapter_name,
+      adapter_context, adapter_description)
+    values (#{uuid,jdbcType=VARCHAR}, #{adapterType,jdbcType=VARCHAR}, #{adapterName,jdbcType=VARCHAR},
+      #{adapterContext,jdbcType=VARCHAR}, #{adapterDescription,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.geoq.adapter.admin.pojo.AdapterPojo" >
+    insert into mg_adapter_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="adapterType != null" >
+        adapter_type,
+      </if>
+      <if test="adapterName != null" >
+        adapter_name,
+      </if>
+      <if test="adapterContext != null" >
+        adapter_context,
+      </if>
+      <if test="adapterDescription != null" >
+        adapter_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="adapterType != null" >
+        #{adapterType,jdbcType=VARCHAR},
+      </if>
+      <if test="adapterName != null" >
+        #{adapterName,jdbcType=VARCHAR},
+      </if>
+      <if test="adapterContext != null" >
+        #{adapterContext,jdbcType=VARCHAR},
+      </if>
+      <if test="adapterDescription != null" >
+        #{adapterDescription,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.geoq.adapter.admin.pojo.AdapterPojo" >
+    update mg_adapter_config
+    <set >
+      <if test="adapterType != null" >
+        adapter_type = #{adapterType,jdbcType=VARCHAR},
+      </if>
+      <if test="adapterName != null" >
+        adapter_name = #{adapterName,jdbcType=VARCHAR},
+      </if>
+      <if test="adapterContext != null" >
+        adapter_context = #{adapterContext,jdbcType=VARCHAR},
+      </if>
+      <if test="adapterDescription != null" >
+        adapter_description = #{adapterDescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.geoq.adapter.admin.pojo.AdapterPojo" >
+    update mg_adapter_config
+    set adapter_type = #{adapterType,jdbcType=VARCHAR},
+      adapter_name = #{adapterName,jdbcType=VARCHAR},
+      adapter_context = #{adapterContext,jdbcType=VARCHAR},
+      adapter_description = #{adapterDescription,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

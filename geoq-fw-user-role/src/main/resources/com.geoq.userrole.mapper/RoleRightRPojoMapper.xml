@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mybatis.dao.RoleRightRPojoMapper">
+  <resultMap id="BaseResultMap" type="com.geoq.userrole.mapper.RoleRightRPojoMapper">
+    <constructor>
+      <idArg column="uuid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="role_uuid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="right_uuid" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="RelativeResultMap" type="java.util.HashMap">
+    <result property="role_name" column="name"/>
+    <collection property="right_list" javaType="java.util.List" ofType="java.util.HashMap">
+      <result property="right_uuid" column="right_uuid" />
+      <result property="right_name" column="right_name" />
+      <result property="right_code" column="right_code" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, role_uuid, right_uuid
+  </sql>
+  <select id="select_all" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mg_role_right_r
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mg_role_right_r
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </select>
+  <select id="query_role_right_code" parameterType="java.lang.String" resultMap="RelativeResultMap">
+    SELECT
+-- 	table_a.uuid,
+	table_a."name",
+	mg_role_right.uuid AS "right_uuid",
+	mg_role_right."name" AS "right_name",
+	mg_role_right.code AS "right_code"
+FROM
+	( SELECT mg_role.uuid, mg_role."name", mg_role_right_r.right_uuid FROM mg_role LEFT JOIN mg_role_right_r ON mg_role.uuid = mg_role_right_r.role_uuid ) AS table_a
+	LEFT JOIN mg_role_right ON table_a.right_uuid = mg_role_right.uuid
+where
+	table_a.uuid = #{uuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from mg_role_right_r
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.test.mybatis.pojo.RoleRightRPojo">
+    insert into mg_role_right_r (uuid, role_uuid, right_uuid
+      )
+    values (#{uuid,jdbcType=VARCHAR}, #{roleUuid,jdbcType=VARCHAR}, #{rightUuid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.mybatis.pojo.RoleRightRPojo">
+    insert into mg_role_right_r
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="roleUuid != null">
+        role_uuid,
+      </if>
+      <if test="rightUuid != null">
+        right_uuid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="roleUuid != null">
+        #{roleUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="rightUuid != null">
+        #{rightUuid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.mybatis.pojo.RoleRightRPojo">
+    update mg_role_right_r
+    <set>
+      <if test="roleUuid != null">
+        role_uuid = #{roleUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="rightUuid != null">
+        right_uuid = #{rightUuid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.mybatis.pojo.RoleRightRPojo">
+    update mg_role_right_r
+    set role_uuid = #{roleUuid,jdbcType=VARCHAR},
+      right_uuid = #{rightUuid,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mybatis.dao.UserPojoMapper">
+  <resultMap id="BaseResultMap" type="com.geoq.userrole.mapper.UserPojoMapper">
+    <constructor>
+      <idArg column="uuid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="role" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="department" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="loginDetailMap" type="java.util.Map">
+      <result column="user_uuid" property="user_uuid"/>
+      <result column="user_name" property="user_name"/>
+      <result column="user_role" property="user_role"/>
+      <result column="user_department" property="user_department"/>
+      <collection property="right_list" javaType="java.util.List" ofType="java.util.HashMap">
+          <result property="right_name" column="right_name" />
+          <result property="right_code" column="right_code" />
+      </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, name, password, role, department
+  </sql>
+  <select id="select_all" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mg_user
+  </select>
+  <select id="select_all_decorate" resultMap="BaseResultMap">
+    SELECT
+        mg_user.uuid,
+        mg_user.NAME,
+        repeat('*', 5) as password,
+        mg_department.NAME AS department,
+        mg_role.NAME AS ROLE
+    FROM
+        mg_user
+        LEFT JOIN mg_department ON mg_user.department = mg_department.uuid
+        LEFT JOIN mg_role ON mg_user.ROLE = mg_role.uuid
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mg_user
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByNameAndPassWord" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mg_user
+    where name = #{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
+  <select id="count_by_department_uuid" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(1) as Count_sum from mg_user
+        where department = #{uuid, jdbcType=VARCHAR}
+   </select>
+  <select id="countByName" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(1) as Count_sum from mg_user
+        where name = #{name, jdbcType=VARCHAR}
+  </select>
+  <select id="selectLoginDetail" resultMap="loginDetailMap" parameterType="java.lang.String">
+    SELECT
+	table_d.uuid AS user_uuid,
+	table_d.NAME AS user_name,
+	table_d.ROLE AS user_role,
+	table_d.department AS user_department,
+	table_c.right_name AS right_name,
+	table_c.right_code AS right_code
+    FROM
+        (
+    SELECT
+        mg_user.uuid,
+        mg_user.NAME,
+        mg_department.NAME AS department,
+        mg_role.NAME AS ROLE,
+        mg_user.ROLE AS role_uuid
+    FROM
+        mg_user
+        LEFT JOIN mg_department ON mg_user.department = mg_department.uuid
+        LEFT JOIN mg_role ON mg_user.ROLE = mg_role.uuid
+        ) AS table_d
+        LEFT JOIN (
+    SELECT
+        table_a.uuid AS "role_uuid",
+        mg_role_right.uuid AS "right_uuid",
+        mg_role_right."name" AS "right_name",
+        mg_role_right.code AS "right_code"
+    FROM
+        ( SELECT mg_role.uuid, mg_role."name", mg_role_right_r.right_uuid
+            FROM mg_role LEFT JOIN mg_role_right_r ON mg_role.uuid = mg_role_right_r.role_uuid ) AS table_a
+        LEFT JOIN mg_role_right ON table_a.right_uuid = mg_role_right.uuid
+        ) AS table_c ON table_d.role_uuid = table_c.role_uuid
+    WHERE
+        table_d.uuid = #{uuid, jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from mg_user
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+    delete from mg_user where uuid in
+    <foreach collection="array" item="arr" index="no" open="(" separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.test.mybatis.pojo.UserPojo">
+    insert into mg_user (uuid, name, password, 
+      role, department)
+    values (#{uuid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{role,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.mybatis.pojo.UserPojo">
+    insert into mg_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="role != null">
+        role,
+      </if>
+      <if test="department != null">
+        department,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.mybatis.pojo.UserPojo">
+    update mg_user
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        role = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.mybatis.pojo.UserPojo">
+    update mg_user
+    set name = #{name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      role = #{role,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

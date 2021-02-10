@@ -1,0 +1,7 @@
+# Project exclude paths
+/geoq-fw-arcserver-admin/target/
+/geoq-fw-common/target/
+/geoq-fw-user-role/target/
+/geoq-mplat-adapter-config/target/
+/geoq-mplat-arcservice-harvest/target/
+/geoq-mplat-common/target/
