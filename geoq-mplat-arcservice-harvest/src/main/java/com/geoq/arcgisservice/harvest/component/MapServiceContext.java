@@ -2,9 +2,13 @@ package com.geoq.arcgisservice.harvest.component;
 
 
 import cn.hutool.json.JSONUtil;
+import com.geoq.arcserver.admin.message.BaseMessage;
+import com.geoq.arcserver.admin.message.MapServiceMessage;
+import com.geoq.arcserver.admin.message.element.Layer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /***
@@ -22,7 +26,12 @@ public class MapServiceContext extends AbstractServiceContext {
     }
 
     @Override
-    public AbstractServiceContext extract(String temp) {
-        return null;
+    public AbstractServiceContext extract(BaseMessage temp) {
+        MapServiceMessage targetMessage = (MapServiceMessage)temp;
+        Layers = new ArrayList<>();
+        for (Layer layer : targetMessage.getLayers()) {
+            Layers.add(layer.getName());
+        }
+        return this;
     }
 }

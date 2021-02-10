@@ -1,5 +1,7 @@
 package com.geoq.arcgisservice.harvest.component;
 
+import com.geoq.arcserver.admin.message.BaseMessage;
+
 public class FeatureServiceContext extends AbstractServiceContext{
 
     @Override
@@ -8,7 +10,7 @@ public class FeatureServiceContext extends AbstractServiceContext{
     }
 
     @Override
-    public AbstractServiceContext extract(String temp) {
+    public AbstractServiceContext extract(BaseMessage temp) {
         return null;
     }
 }

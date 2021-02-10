@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-@Slf4j
 public class ServiceContextFactory {
 
     public AbstractServiceContext create(String messageClassName)

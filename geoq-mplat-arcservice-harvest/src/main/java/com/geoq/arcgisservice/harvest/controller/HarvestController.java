@@ -27,7 +27,7 @@ public class HarvestController {
         catch (Exception ex)
         {
             log.error(ex.getMessage(), ex);
-            result.error(ex.getMessage(),null);
+            result.error(ex.getCause().getMessage(),null);
         }
         return result;
     }

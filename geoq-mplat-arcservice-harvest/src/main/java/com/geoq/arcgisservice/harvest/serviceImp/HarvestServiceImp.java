@@ -42,7 +42,7 @@ public class HarvestServiceImp implements HarvestService {
                 //按照具体类型机型收割
                 AbstractServiceContext context = factory.create(type.getClass().getSimpleName());
                 if(context != null)
-                    result = context.extract(temp).toJson();
+                    result = context.extract(msg).toJson();
             }
             else
                 result = CommonUtils.failMsgTemplate("service stop");
