@@ -75,5 +75,19 @@ public class AdminController {
         return result;
     }
 
-
+    @GetMapping("/asset_type_code")
+    public CommonResult generate_asset_type_code(String uuid)
+    {
+        CommonResult result = new CommonResult<>();
+        try
+        {
+            result.ok(CommonUtils.ResponseTag_Success, service.generate_asset_type_code(uuid));
+        }
+        catch (Exception ex)
+        {
+            log.error("all_record",ex);
+            result.error(CommonUtils.ResponseTag_Error,ex.getLocalizedMessage());
+        }
+        return result;
+    }
 }

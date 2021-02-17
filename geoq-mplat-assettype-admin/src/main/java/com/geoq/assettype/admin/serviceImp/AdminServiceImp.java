@@ -4,16 +4,21 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.util.NumberUtil;
 import com.geoq.assettype.admin.config.AssetTypeTreeNodeConfig;
 import com.geoq.assettype.admin.mapper.AssetTypePojoMapper;
 import com.geoq.assettype.admin.pojo.AssetTypePojo;
 import com.geoq.assettype.admin.service.AdminService;
+import com.geoq.common.datastruct.AdjacencyTable;
+import com.geoq.common.datastruct.AdjacencyTableElement;
 import com.geoq.common.entry.CommonUtils;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -36,9 +41,18 @@ public class AdminServiceImp implements AdminService {
         try
         {
             pojo.setUuid(UUID.fastUUID().toString());
-            //依据uuid溯源，生成code
-            
+            if(NumberUtil.isInteger(mapper.selectByPrimaryKey(pojo.getUuid()).getCode()))
+            {
+                List<AssetTypePojo> brother_nodes = mapper.selectByParentUUID(pojo.getParentUuid());
+                AssetTypePojo tempNode = brother_nodes.stream().max((a, b)->Integer.parseInt(a.getCode()) - Integer.parseInt(b.getCode())).get();
+                pojo.setCode(String.format("%2d",Integer.parseInt(tempNode.getCode())+1));
+            }
             result = CommonUtils.successMsgTemplate(pojo.getUuid());
+        }
+        catch (NumberFormatException ex)
+        {
+            log.error("create_asset_type",ex);
+            result = CommonUtils.errorMsgTemplate("不能创建一级类别...");
         }
         catch (Exception ex){
             log.error("create_asset_type",ex);
@@ -80,5 +94,17 @@ public class AdminServiceImp implements AdminService {
             result = CommonUtils.errorMsgTemplate(ex.getLocalizedMessage());
         }
         return result;
+    }
+
+    @Override
+    public String generate_asset_type_code(String uuid) {
+        AssetTypePojo current_pojo = mapper.selectByPrimaryKey(uuid);
+        AdjacencyTable table = new AdjacencyTable();
+        table.loadData(mapper.select_all());
+        for (AdjacencyTableElement element : table.trackBack2root(current_pojo)) {
+            log.info(((AssetTypePojo)(element)).getCode());
+        }
+        table.release();
+        return "";
     }
 }

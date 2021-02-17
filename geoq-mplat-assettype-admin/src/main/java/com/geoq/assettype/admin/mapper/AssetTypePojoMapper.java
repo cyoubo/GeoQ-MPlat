@@ -1,6 +1,7 @@
 package com.geoq.assettype.admin.mapper;
 
 import com.geoq.assettype.admin.pojo.AssetTypePojo;
+import com.geoq.common.datastruct.AdjacencyTableElement;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -22,4 +23,6 @@ public interface AssetTypePojoMapper {
     int updateByPrimaryKey(AssetTypePojo record);
 
     List<AssetTypePojo> select_all();
+
+    List<AssetTypePojo> selectByParentUUID(String parentUuid);
 }

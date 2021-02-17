@@ -1,6 +1,8 @@
 package com.geoq.assettype.admin.pojo;
 
-public class AssetTypePojo {
+import com.geoq.common.datastruct.AdjacencyTableElement;
+
+public class AssetTypePojo implements AdjacencyTableElement {
     private String uuid;
 
     private String parentUuid;
@@ -50,5 +52,15 @@ public class AssetTypePojo {
 
     public void setCode(String code) {
         this.code = code == null ? null : code.trim();
+    }
+
+    @Override
+    public String getParentKey() {
+        return this.parentUuid;
+    }
+
+    @Override
+    public String getSelfKey() {
+        return this.uuid;
     }
 }

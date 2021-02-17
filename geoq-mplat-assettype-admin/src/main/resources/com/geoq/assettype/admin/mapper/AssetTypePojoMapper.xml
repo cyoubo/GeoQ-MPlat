@@ -23,6 +23,12 @@
     <include refid="Base_Column_List" />
     from mg_asset_type
   </select>
+  <select id="selectByParentUUID" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from mg_asset_type
+    where parent_uuid = #{parentUuid,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from mg_asset_type
     where uuid = #{uuid,jdbcType=VARCHAR}

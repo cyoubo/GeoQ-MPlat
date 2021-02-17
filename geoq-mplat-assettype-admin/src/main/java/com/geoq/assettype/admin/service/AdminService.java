@@ -14,4 +14,6 @@ public interface AdminService {
     AssetTypePojo select_by_uuid(String uuid);
 
     String delete_by_uuid(String uuid);
+
+    String generate_asset_type_code(String uuid);
 }

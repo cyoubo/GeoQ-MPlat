@@ -17,6 +17,8 @@
         <module name="geoq-fw-common" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="8" />
+    <bytecodeTargetLevel target="8">
+      <module name="geoq-mplat-asserttype-admin" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
